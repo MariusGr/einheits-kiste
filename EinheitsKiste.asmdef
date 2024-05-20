@@ -1,8 +1,9 @@
 {
-	"name": "EinheitsKiste",
-	"rootNamespace": "",
+    "name": "EinheitsKiste",
+    "rootNamespace": "",
     "references": [
-        "MyBox"
+        "MyBox",
+        "TypeReferences"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
