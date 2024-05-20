@@ -8,7 +8,7 @@ namespace EinheitsKiste
 {
     public class KeyObject : MonoBehaviour
     {
-        [SerializeField, Inherits(typeof(Enum), DropdownHeight = 300)] private TypeReference enumType = typeof(TZG.Runtime.CharacterKeyObjectEnum);
+        [SerializeField, Inherits(typeof(Enum), DropdownHeight = 300)] private TypeReference enumType;
         [field: SerializeField, DefinedValues(nameof(GetKeyNames))] public int Key { get; private set; }
 
         public class NoKeyObjectFoundException : Exception
