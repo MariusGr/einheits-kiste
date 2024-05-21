@@ -1,0 +1,8 @@
+[submodule "Packages/EinheitsKiste"]
+	path = Packages/EinheitsKiste
+	url = git@github.com:MariusGr/einheits-kiste.git
+	branch =develop-package
+[submodule "Packages/MyBox"]
+	path = Packages/MyBox
+	url = git@github.com:MariusGr/MyBox.git
+	branch =develop-package
