@@ -1,5 +1,7 @@
 using UnityEngine;
 using System;
+using System.Reflection;
+using System.Collections.Generic;
 using System.Linq;
 using MyBox;
 using TypeReferences;
@@ -8,8 +10,26 @@ namespace EinheitsKiste
 {
     public class KeyObject : MonoBehaviour
     {
-        [SerializeField, Inherits(typeof(Enum), DropdownHeight = 300)] private TypeReference enumType;
+        private const string KEYOBJECTNAMESPACE = "KeyObjects.";
+
+        [SerializeField, DefinedValues(nameof(GetEnumTypeNames))] private TypeReference enumType;
         [field: SerializeField, DefinedValues(nameof(GetKeyNames))] public int Key { get; private set; }
+
+        private LabelValuePair[] GetEnumTypeNames()
+        {
+            List<string> labels = new();
+            List<object> values = new();
+            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (Type t in a.GetTypes().Where(t => t.IsEnum && t.FullName.Contains(KEYOBJECTNAMESPACE)))
+                {
+                    labels.Add(t.FullName.Split(KEYOBJECTNAMESPACE)[1]);
+                    values.Add(t);
+                }
+            }
+
+            return labels.Zip(values, (label, value) => new LabelValuePair(label, value)).ToArray();
+        }
 
         public class NoKeyObjectFoundException : Exception
         {
@@ -23,8 +43,8 @@ namespace EinheitsKiste
 
         private LabelValuePair[] GetKeyNames()
         {
-            var labels = Enum.GetNames(enumType);
-            var values = Enum.GetValues(enumType).Cast<int>();
+            var labels = Enum.GetNames(enumType.Type);
+            var values = Enum.GetValues(enumType.Type).Cast<int>();
             return labels.Zip(values, (label, value) => new LabelValuePair(label, value)).ToArray();
         }
 
