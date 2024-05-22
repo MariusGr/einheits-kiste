@@ -10,10 +10,16 @@ namespace EinheitsKiste
 {
     public class KeyObject : MonoBehaviour
     {
+        public event EventHandler EnumTypeChanged;
         private const string KEYOBJECTNAMESPACE = "KeyObjects.";
 
-        [SerializeField, DefinedValues(nameof(GetEnumTypeNames))] private TypeReference enumType;
-        [field: SerializeField, DefinedValues(nameof(GetKeyNames))] public int Key { get; private set; }
+        [SerializeField, DefinedValues(nameof(GetEnumTypeNames), valueChangedMethod: nameof(OnEnumTypeChanged))]
+        private TypeReference enumType;
+
+        [field: SerializeField, DefinedValues(nameof(GetKeyNames), initializeEvent: nameof(EnumTypeChanged))]
+        public int Key { get; private set; }
+
+        private void OnEnumTypeChanged() => EnumTypeChanged?.Invoke(this, null);
 
         private LabelValuePair[] GetEnumTypeNames()
         {
