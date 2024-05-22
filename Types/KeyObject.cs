@@ -19,6 +19,7 @@ namespace EinheitsKiste
         [field: SerializeField, DefinedValues(nameof(GetKeyNames), initializeEvent: nameof(EnumTypeChanged))]
         public int Key { get; private set; }
 
+#if UNITY_EDITOR
         private void OnEnumTypeChanged() => EnumTypeChanged?.Invoke(this, null);
 
         private LabelValuePair[] GetEnumTypeNames()
@@ -37,6 +38,14 @@ namespace EinheitsKiste
             return labels.Zip(values, (label, value) => new LabelValuePair(label, value)).ToArray();
         }
 
+        private LabelValuePair[] GetKeyNames()
+        {
+            var labels = Enum.GetNames(enumType.Type);
+            var values = Enum.GetValues(enumType.Type).Cast<int>();
+            return labels.Zip(values, (label, value) => new LabelValuePair(label, value)).ToArray();
+        }
+#endif
+
         public class NoKeyObjectFoundException : Exception
         {
             public NoKeyObjectFoundException(string message) : base(message) { }
@@ -45,13 +54,6 @@ namespace EinheitsKiste
         public class MoreThanOneKeyObjectsFoundException : Exception
         {
             public MoreThanOneKeyObjectsFoundException(string message) : base(message) { }
-        }
-
-        private LabelValuePair[] GetKeyNames()
-        {
-            var labels = Enum.GetNames(enumType.Type);
-            var values = Enum.GetValues(enumType.Type).Cast<int>();
-            return labels.Zip(values, (label, value) => new LabelValuePair(label, value)).ToArray();
         }
 
         public static KeyObject GetKeyObject(Transform root, int value, Type enumType)
