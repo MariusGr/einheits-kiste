@@ -24,8 +24,8 @@ namespace EinheitsKiste
 
         private LabelValuePair[] GetEnumTypeNames()
         {
-            List<string> labels = new();
-            List<object> values = new();
+            List<string> labels = new() { "None" };
+            List<object> values = new() { null };
             foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
             {
                 foreach (Type t in a.GetTypes().Where(t => t.IsEnum && t.FullName.Contains(KEYOBJECTNAMESPACE)))
