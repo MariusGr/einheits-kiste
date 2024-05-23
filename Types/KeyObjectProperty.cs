@@ -54,6 +54,10 @@ namespace EinheitsKiste.Internal
 
             if (values.Count() == 0 || labels.Count() == 0)
                 throw new ArgumentException($"The provided enum {enumType} is empty.");
+
+            if (labels.First().ToLower() != "none" || values.First() != 0)
+                Debug.LogWarning($"It appears that the provided enum '{enumType}' does not have a 'None' default value as first option. " +
+                "Please make sure that the provided enum starts with a 'None' entry at index 0.");
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
