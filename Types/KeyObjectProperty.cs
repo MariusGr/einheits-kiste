@@ -48,8 +48,12 @@ namespace EinheitsKiste.Internal
             if (initialized) return;
             initialized = true;
 
-            values = Enum.GetValues(defaultValuesAttribute.enumType).Cast<int>().ToArray();
-            labels = Enum.GetNames(defaultValuesAttribute.enumType);
+            var enumType = defaultValuesAttribute.enumType;
+            values = Enum.GetValues(enumType).Cast<int>().ToArray();
+            labels = Enum.GetNames(enumType);
+
+            if (values.Count() == 0 || labels.Count() == 0)
+                throw new ArgumentException($"The provided enum {enumType} is empty.");
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
