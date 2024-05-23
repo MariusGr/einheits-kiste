@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b98412805fdd41ecb3d63aa014717ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enumType:
+  <EnumType>k__BackingField:
     GuidAssignmentFailed: 0
     GUID: 
     _typeNameAndAssembly: KeyObjects.TestEnum2, Assembly-CSharp
@@ -388,12 +388,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b98412805fdd41ecb3d63aa014717ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enumType:
+  <EnumType>k__BackingField:
     GuidAssignmentFailed: 0
     GUID: 
     _typeNameAndAssembly: KeyObjects.TestEnum, Assembly-CSharp
     _suppressLogs: 0
-  <Key>k__BackingField: 4
+  <Key>k__BackingField: 2
 --- !u!4 &1571036463
 Transform:
   m_ObjectHideFlags: 0
