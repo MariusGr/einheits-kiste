@@ -111,7 +111,9 @@ namespace EinheitsKiste.Internal
 
                 try
                 {
-                    property.objectReferenceValue = KeyObject.GetTransform(((MonoBehaviour)property.serializedObject.targetObject).transform, newValue, enumType);
+                    property.objectReferenceValue = KeyObject.GetTransform(((MonoBehaviour)property.serializedObject.targetObject).transform,
+                                                                           newValue,
+                                                                           enumType);
                 }
                 catch (Exception e)
                 {

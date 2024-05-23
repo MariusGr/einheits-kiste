@@ -11,7 +11,7 @@ namespace EinheitsKiste
     public class KeyObject : MonoBehaviour
     {
         public event EventHandler EnumTypeChanged;
-        private const string KEYOBJECTNAMESPACE = "KeyObjects.";
+        private const string KEY_OBJECT_NAMESPACE = "KeyObjects.";
 
         [field: SerializeField, DefinedValues(nameof(GetEnumTypeNames), valueChangedMethod: nameof(OnEnumTypeChanged))]
         public TypeReference EnumType { get; private set; }
@@ -29,9 +29,9 @@ namespace EinheitsKiste
             List<object> values = new() { null };
             foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
             {
-                foreach (Type t in a.GetTypes().Where(t => t.IsEnum && t.FullName.Contains(KEYOBJECTNAMESPACE)))
+                foreach (Type t in a.GetTypes().Where(t => t.IsEnum && t.FullName.Contains(KEY_OBJECT_NAMESPACE)))
                 {
-                    labels.Add(t.FullName.Split(KEYOBJECTNAMESPACE)[1]);
+                    labels.Add(t.FullName.Split(KEY_OBJECT_NAMESPACE)[1]);
                     values.Add(t);
                 }
             }
