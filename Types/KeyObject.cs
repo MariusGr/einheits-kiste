@@ -16,10 +16,11 @@ namespace EinheitsKiste
         [field: SerializeField, DefinedValues(nameof(GetEnumTypeNames), valueChangedMethod: nameof(OnEnumTypeChanged))]
         public TypeReference EnumType { get; private set; }
 
-        [field: SerializeField, DefinedValues(nameof(GetKeyNames), initializeEvent: nameof(EnumTypeChanged))]
+        [field: SerializeField, ConditionalField(true, nameof(EnumTypeIsValid)), DefinedValues(nameof(GetKeyNames), initializeEvent: nameof(EnumTypeChanged))]
         public int Key { get; private set; }
 
 #if UNITY_EDITOR
+        private bool EnumTypeIsValid() => EnumType.Type != null;
         private void OnEnumTypeChanged() => EnumTypeChanged?.Invoke(this, null);
 
         private LabelValuePair[] GetEnumTypeNames()
