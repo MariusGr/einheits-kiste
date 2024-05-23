@@ -84,10 +84,16 @@ namespace EinheitsKiste.Internal
             {
                 var transform = (Transform)property.objectReferenceValue;
                 if (transform == null) return 0;
+                var keyObject = transform.GetComponent<KeyObject>();
+
+                if (keyObject.EnumType.Type != keyObjectReference.enumType)
+                {
+                    property.objectReferenceValue = null;
+                    return 0;
+                }
 
                 for (var i = 0; i < values.Length; i++)
                 {
-                    var keyObject = transform.GetComponent<KeyObject>();
                     if (keyObject.Key == i) return i;
                 }
 
@@ -97,7 +103,26 @@ namespace EinheitsKiste.Internal
             void ApplyNewValue(int newValueIndex, Type enumType)
             {
                 var newValue = values[newValueIndex];
-                property.objectReferenceValue = KeyObject.GetTransform(((MonoBehaviour)property.serializedObject.targetObject).transform, newValue, enumType);
+                if (newValue == 0)
+                {
+                    property.objectReferenceValue = null;
+                    return;
+                }
+
+                try
+                {
+                    property.objectReferenceValue = KeyObject.GetTransform(((MonoBehaviour)property.serializedObject.targetObject).transform, newValue, enumType);
+                }
+                catch (Exception e)
+                {
+                    if (e is KeyObject.MoreThanOneKeyObjectsFoundException || e is KeyObject.NoKeyObjectFoundException)
+                    {
+                        Debug.LogWarning($"Had to reset {property.name} of {property.serializedObject.targetObject} because of Exception: {e}");
+                        property.objectReferenceValue = null;
+                    }
+                    else
+                        throw;
+                }
                 EditorUtility.SetDirty(property.serializedObject.targetObject);
 
                 property.serializedObject.ApplyModifiedProperties();
