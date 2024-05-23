@@ -13,8 +13,8 @@ namespace EinheitsKiste
         public event EventHandler EnumTypeChanged;
         private const string KEYOBJECTNAMESPACE = "KeyObjects.";
 
-        [SerializeField, DefinedValues(nameof(GetEnumTypeNames), valueChangedMethod: nameof(OnEnumTypeChanged))]
-        private TypeReference enumType;
+        [field: SerializeField, DefinedValues(nameof(GetEnumTypeNames), valueChangedMethod: nameof(OnEnumTypeChanged))]
+        public TypeReference EnumType { get; private set; }
 
         [field: SerializeField, DefinedValues(nameof(GetKeyNames), initializeEvent: nameof(EnumTypeChanged))]
         public int Key { get; private set; }
@@ -40,8 +40,8 @@ namespace EinheitsKiste
 
         private LabelValuePair[] GetKeyNames()
         {
-            var labels = Enum.GetNames(enumType.Type);
-            var values = Enum.GetValues(enumType.Type).Cast<int>();
+            var labels = Enum.GetNames(EnumType.Type);
+            var values = Enum.GetValues(EnumType.Type).Cast<int>();
             return labels.Zip(values, (label, value) => new LabelValuePair(label, value)).ToArray();
         }
 #endif
@@ -58,7 +58,7 @@ namespace EinheitsKiste
 
         public static KeyObject GetKeyObject(Transform root, int value, Type enumType)
         {
-            var objects = root.GetComponentsInChildren<KeyObject>().Where(x => x.Key == value && x.enumType.Type == enumType);
+            var objects = root.GetComponentsInChildren<KeyObject>().Where(x => x.Key == value && x.EnumType.Type == enumType);
 
             if (objects.Count() == 0)
                 throw new NoKeyObjectFoundException($"No {nameof(KeyObject)} found under '{root.gameObject.name}' with key '{value} from enum {enumType}'. " +
