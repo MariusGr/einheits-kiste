@@ -49,19 +49,19 @@ namespace EinheitsKiste
         // Source: https://codereview.stackexchange.com/questions/276679/creating-a-generic-base-class-for-singletons-in-unity
         public class SingletonDoesNotExistException : Exception
         {
-            private static string message
+            private static string DefaultMessage
                 => $"{typeof(SingletonMonoBehaviour<T>)} is required by a script, but does not exist in scene \"{SceneManager.GetActiveScene().name}\".";
-            public SingletonDoesNotExistException() : base(message) { }
+            public SingletonDoesNotExistException() : base(DefaultMessage) { }
         }
 
         // Source: https://codereview.stackexchange.com/questions/276679/creating-a-generic-base-class-for-singletons-in-unity
         public class MultipleSingletonInSceneException : Exception
         {
-            private static string message(IEnumerable<T> singletons)
+            private static string DefaultMessage(IEnumerable<T> singletons)
                 => $"{typeof(SingletonMonoBehaviour<T>)} is a singleton, but multiple copies exist in the scene {SceneManager.GetActiveScene().name}: "
                    + string.Join(", ", singletons.Select(s => $"{s.name} ({s.gameObject.name})"));
 
-            public MultipleSingletonInSceneException(params T[] singletons) : base(message(singletons)) { }
+            public MultipleSingletonInSceneException(params T[] singletons) : base(DefaultMessage(singletons)) { }
         }
     }
 }

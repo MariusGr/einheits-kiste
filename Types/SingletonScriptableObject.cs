@@ -9,9 +9,6 @@ namespace EinheitsKiste
 {
     public class ScriptableObjectSingleton<T> : ScriptableObject where T : ScriptableObject
     {
-        private static SingletonDoesNotExistException CreateSingletonDoesNotExistException()
-            => new($"Could not find instance of {typeof(T).Name} in Assets folder.");
-
         private static T instance;
         public static T Instance
         {
@@ -26,7 +23,7 @@ namespace EinheitsKiste
         private static T FindSingleton()
         {
             var typeName = typeof(T).Name;
-            var guid = AssetDatabase.FindAssets($"t:{typeName}").FirstOrDefault() ?? throw CreateSingletonDoesNotExistException();
+            var guid = AssetDatabase.FindAssets($"t:{typeName}").FirstOrDefault() ?? throw new SingletonDoesNotExistException();
             var path = AssetDatabase.GUIDToAssetPath(guid);
             var singleton = AssetDatabase.LoadAssetAtPath<T>(path);
             return singleton;
@@ -63,9 +60,8 @@ namespace EinheitsKiste
         public class SingletonDoesNotExistException : Exception
         {
             private static string DefaultMessage
-                => $"{typeof(ScriptableObjectSingleton<T>)} is required by a script, but does not exist in scene \"{SceneManager.GetActiveScene().name}\".";
+                => $"Could not find instance of {typeof(T).Name} in Assets folder.";
             public SingletonDoesNotExistException() : base(DefaultMessage) { }
-            public SingletonDoesNotExistException(string message) : base(message) { }
         }
 
         // Source: https://codereview.stackexchange.com/questions/276679/creating-a-generic-base-class-for-singletons-in-unity
