@@ -1,13 +1,20 @@
 {
-"name": "com.mariusgripp.einheits-kiste",
-"version": "1.0.0",
-"displayName": "EinheitsKiste",
-"description": "EinheitsKiste is a set of tools, features and extensions for Unity.",
-"unity": "2022.3",
-"dependencies": {
-},
-"keywords": ["attributes", "extensions", "editor tools", "patterns", "utility"],
-"author": { "name" : "Marius Gripp",
-   "email" : "mail@marius-gripp.de",
-   "url" : "www.marius-gripp.de" }
+   "name": "com.mariusgripp.einheits-kiste",
+   "version": "1.0.0",
+   "displayName": "EinheitsKiste",
+   "description": "EinheitsKiste is a set of tools, features and extensions for Unity.",
+   "unity": "2022.3",
+   "dependencies": {},
+   "keywords": [
+      "attributes",
+      "extensions",
+      "editor tools",
+      "patterns",
+      "utility"
+   ],
+   "author": {
+      "name": "Marius Gripp",
+      "email": "mail@marius-gripp.de",
+      "url": "www.marius-gripp.de"
+   }
 }
