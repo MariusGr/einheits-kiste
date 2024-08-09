@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "com.adammyhre.unity-event-bus": {
+      "version": "file:Unity-Event-Bus",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.domybest.mybox": {
       "version": "file:MyBox",
       "depth": 0,
