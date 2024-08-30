@@ -4,7 +4,9 @@
       "version": "file:Unity-Event-Bus",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {}
+      "dependencies": {
+        "com.domybest.mybox": "git@github.com:MariusGr/MyBox.git"
+      }
     },
     "com.domybest.mybox": {
       "version": "file:MyBox",
