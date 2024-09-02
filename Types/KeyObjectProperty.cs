@@ -86,7 +86,7 @@ namespace EinheitsKiste.Internal
                 if (transform == null) return 0;
                 var keyObject = transform.GetComponent<KeyObject>();
 
-                if (keyObject.EnumType.Type != keyObjectReference.enumType)
+                if (keyObject == null || keyObject.EnumType.Type != keyObjectReference.enumType)
                 {
                     property.objectReferenceValue = null;
                     return 0;
