@@ -1,6 +1,6 @@
 {
     "name": "EinheitsKiste",
-    "rootNamespace": "",
+    "rootNamespace": "EinheitsKiste",
     "references": [
         "MyBox",
         "TypeReferences"
