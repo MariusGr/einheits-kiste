@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using SolidUtilities.Editor;
 
 namespace EinheitsKiste
 {
@@ -82,7 +83,14 @@ namespace EinheitsKiste.Internal
 
             int GetSelectedIndex()
             {
-                var transform = (Transform)property.objectReferenceValue;
+                Type type = property.GetObjectType();
+
+                if (type == null || property.objectReferenceValue == null) return 0;
+
+                Transform transform = type == typeof(Transform) ? (Transform)property.objectReferenceValue :
+                                      type == typeof(GameObject) ? ((GameObject)property.objectReferenceValue).transform :
+                                      type.IsSubclassOf(typeof(Component)) ? ((Component)property.objectReferenceValue).transform : null;
+
                 if (transform == null) return 0;
                 var keyObject = transform.GetComponent<KeyObject>();
 
@@ -93,9 +101,7 @@ namespace EinheitsKiste.Internal
                 }
 
                 for (var i = 0; i < values.Length; i++)
-                {
                     if (keyObject.Key == i) return i;
-                }
 
                 return 0;
             }
@@ -111,9 +117,26 @@ namespace EinheitsKiste.Internal
 
                 try
                 {
-                    property.objectReferenceValue = KeyObject.GetTransform(((MonoBehaviour)property.serializedObject.targetObject).transform,
-                                                                           newValue,
-                                                                           enumType);
+                    var transform = ((MonoBehaviour)property.serializedObject.targetObject).transform;
+
+                    Type type = property.GetObjectType();
+
+                    if (type == typeof(Transform))
+                        property.objectReferenceValue = KeyObject.GetTransform(transform,
+                                                                               newValue,
+                                                                               enumType);
+                    else if (type == typeof(GameObject))
+                        property.objectReferenceValue = KeyObject.GetGameObject(transform,
+                                                                               newValue,
+                                                                               enumType);
+                    else if (type.IsSubclassOf(typeof(Component)))
+                        property.objectReferenceValue = KeyObject.GetComponent(transform,
+                                                                               newValue,
+                                                                               enumType,
+                                                                               type);
+                    else
+                        throw new ArgumentException($"The provided Type '{type}' is not supported. " +
+                            $"You need something derived of {nameof(Component)}.");
                 }
                 catch (Exception e)
                 {

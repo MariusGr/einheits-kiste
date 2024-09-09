@@ -73,5 +73,6 @@ namespace EinheitsKiste
 
         public static Transform GetTransform(Transform root, int value, Type enumType) => GetKeyObject(root, value, enumType).transform;
         public static GameObject GetGameObject(Transform root, int value, Type enumType) => GetKeyObject(root, value, enumType).gameObject;
+        public static Component GetComponent(Transform root, int value, Type enumType, Type type) => GetKeyObject(root, value, enumType).GetComponent(type);
     }
 }
