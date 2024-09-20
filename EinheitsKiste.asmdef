@@ -1,9 +1,10 @@
 {
     "name": "EinheitsKiste",
-    "rootNamespace": "",
+    "rootNamespace": "EinheitsKiste",
     "references": [
         "MyBox",
-        "TypeReferences"
+        "TypeReferences",
+        "SolidUtilities.Editor"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

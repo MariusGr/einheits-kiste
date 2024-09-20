@@ -31,21 +31,6 @@ namespace EinheitsKiste
 
         public static bool InstanceExists() => instance != null;
 
-        virtual protected void Awake()
-        {
-            bool instanceExists = InstanceExists();
-            // Instance already set, but it is this object: skip initialisation
-            if (instanceExists && instance.GetInstanceID() == GetInstanceID())
-                return;
-
-            var instances = FindObjectsByType<T>(FindObjectsSortMode.None);
-            // Check if another isntance is already stored in instance
-            if (instanceExists)
-                throw new MultipleSingletonInSceneException(new HashSet<T>(instances) { instance }.ToArray());
-
-            instance = FindSingleton(instances);
-        }
-
         private static T FindSingleton(T[] instances)
         {
             if (instances.Length == 0)

@@ -1,10 +1,12 @@
 {
    "name": "com.mariusgripp.einheits-kiste",
-   "version": "1.0.0",
+   "version": "1.0.1",
    "displayName": "EinheitsKiste",
    "description": "EinheitsKiste is a set of tools, features and extensions for Unity.",
    "unity": "2022.3",
-   "dependencies": {},
+   "dependencies": {
+      "com.solidalloy.util": "1.39.0"
+   },
    "keywords": [
       "attributes",
       "extensions",
@@ -15,6 +17,6 @@
    "author": {
       "name": "Marius Gripp",
       "email": "mail@marius-gripp.de",
-      "url": "www.marius-gripp.de"
+      "url": "http://www.marius-gripp.de"
    }
 }
