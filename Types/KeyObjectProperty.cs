@@ -45,8 +45,6 @@ namespace EinheitsKiste.Internal
     [CustomPropertyDrawer(typeof(KeyObjectReferenceAttribute))]
     public class KeyObjectPropertyDrawer : PropertyDrawer
     {
-        private const float lineHeight = 17f;
-
         private bool initialized;
 
         private void Initialize(SerializedProperty property, KeyObjectReferenceAttribute keyObjectReference)
@@ -65,48 +63,48 @@ namespace EinheitsKiste.Internal
                 Debug.LogWarning($"It appears that the provided enum '{enumType}' does not have a 'None' default value as first option. " +
                 "Please make sure that the provided enum starts with a 'None' entry at index 0.");
 
+            var before = property.objectReferenceValue;
+
             var newValue = values[keyObjectReference.value];
             if (newValue == 0)
-            {
                 property.objectReferenceValue = null;
-                return;
-            }
-
-            try
-            {
-                var transform = ((MonoBehaviour)property.serializedObject.targetObject).transform;
-
-                Type type = property.GetObjectType();
-
-                if (type == typeof(Transform))
-                    property.objectReferenceValue = KeyObject.GetTransform(transform,
-                                                                            newValue,
-                                                                            enumType);
-                else if (type == typeof(GameObject))
-                    property.objectReferenceValue = KeyObject.GetGameObject(transform,
-                                                                            newValue,
-                                                                            enumType);
-                else if (type.IsSubclassOf(typeof(Component)))
-                    property.objectReferenceValue = KeyObject.GetComponent(transform,
-                                                                            newValue,
-                                                                            enumType,
-                                                                            type);
-                else
-                    throw new ArgumentException($"The provided Type '{type}' is not supported. " +
-                        $"You need something derived of {nameof(Component)}.");
-            }
-            catch (Exception e)
-            {
-                if (e is KeyObject.MoreThanOneKeyObjectsFoundException || e is KeyObject.NoKeyObjectFoundException)
+            else
+                try
                 {
-                    Debug.LogWarning($"Had to reset {property.name} of {property.serializedObject.targetObject} because of Exception: {e}");
-                    property.objectReferenceValue = null;
-                }
-                else
-                    throw;
-            }
-            EditorUtility.SetDirty(property.serializedObject.targetObject);
+                    var transform = ((MonoBehaviour)property.serializedObject.targetObject).transform;
 
+                    Type type = property.GetObjectType();
+
+                    if (type == typeof(Transform))
+                        property.objectReferenceValue = KeyObject.GetTransform(transform,
+                                                                                newValue,
+                                                                                enumType);
+                    else if (type == typeof(GameObject))
+                        property.objectReferenceValue = KeyObject.GetGameObject(transform,
+                                                                                newValue,
+                                                                                enumType);
+                    else if (type.IsSubclassOf(typeof(Component)))
+                        property.objectReferenceValue = KeyObject.GetComponent(transform,
+                                                                                newValue,
+                                                                                enumType,
+                                                                                type);
+                    else
+                        throw new ArgumentException($"The provided Type '{type}' is not supported. " +
+                            $"You need something derived of {nameof(Component)}.");
+                }
+                catch (Exception e)
+                {
+                    if (e is KeyObject.MoreThanOneKeyObjectsFoundException || e is KeyObject.NoKeyObjectFoundException)
+                    {
+                        Debug.LogWarning($"Had to reset {property.name} of {property.serializedObject.targetObject} because of Exception: {e}");
+                        property.objectReferenceValue = null;
+                    }
+                    else
+                        throw;
+                }
+                
+            if (before == property.objectReferenceValue) return;
+            EditorUtility.SetDirty(property.serializedObject.targetObject);
             property.serializedObject.ApplyModifiedProperties();
         }
 
