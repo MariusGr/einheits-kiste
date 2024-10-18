@@ -23,8 +23,10 @@ namespace EinheitsKiste
         public readonly Type enumType;
         public readonly int value;
 
-        public KeyObjectReferenceAttribute(Type enumType, object enumValue)
+        public KeyObjectReferenceAttribute(object enumValue)
         {
+            Type enumType = enumValue.GetType();
+
             if (!enumType.IsEnum)
                 throw new ArgumentException($"Provided Type '{enumType}' is not an enum. Please provide an enum for {GetType()}.");
 
