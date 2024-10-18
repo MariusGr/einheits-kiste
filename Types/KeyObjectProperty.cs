@@ -25,15 +25,15 @@ namespace EinheitsKiste
 
         public KeyObjectReferenceAttribute(object enumValue)
         {
-            Type enumType = enumValue.GetType();
+            Type type = enumValue.GetType();
 
-            if (!enumType.IsEnum)
-                throw new ArgumentException($"Provided Type '{enumType}' is not an enum. Please provide an enum for {GetType()}.");
+            if (!type.IsEnum)
+                throw new ArgumentException($"Provided Type '{type}' is not an enum. Please provide an enum for {GetType()}.");
 
-            if (!Enum.IsDefined(enumType, enumValue))
-                throw new ArgumentException($"Provided value '{enumValue}' is not defined in enum '{enumType}'. Please provide a valid value.");
+            if (!Enum.IsDefined(type, enumValue))
+                throw new ArgumentException($"Provided value '{enumValue}' is not defined in enum '{type}'. Please provide a valid value.");
 
-            this.enumType = enumType;
+            enumType = type;
             value = (int)enumValue;
         }
     }
