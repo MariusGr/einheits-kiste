@@ -9,36 +9,41 @@ namespace EinheitsKiste
 {
     public class ScriptableObjectSingleton<T> : ScriptableObject where T : ScriptableObject
     {
-        private static T instance;
-        public static T Instance
+        public static T Instance { get; private set; }
+        public static bool InstanceExists() => Instance != null;
+
+        protected void Awake()
+#if UNITY_EDITOR
         {
-            get
+            // Add the this object to the build
+            var preloadedAssets = PlayerSettings.GetPreloadedAssets().ToList();
+            if (!preloadedAssets.Contains(this))
             {
-                if (!InstanceExists())
-                    instance = FindSingleton();
-                return instance;
+                preloadedAssets.Add(this);
+                PlayerSettings.SetPreloadedAssets(preloadedAssets.ToArray());
             }
+#endif
         }
 
-        private static T FindSingleton()
+        virtual protected void OnEnable()
         {
-            var typeName = typeof(T).Name;
-            var guid = AssetDatabase.FindAssets($"t:{typeName}").FirstOrDefault() ?? throw new SingletonDoesNotExistException();
-            var path = AssetDatabase.GUIDToAssetPath(guid);
-            var singleton = AssetDatabase.LoadAssetAtPath<T>(path);
-            return singleton;
+            // Check if Instance is already set to this object
+            if (InstanceExists() && Instance == this)
+                return;
+
+            if (InstanceExists())
+            {
+                // If there is already an instance of this singleton in the scene, destroy this one
+                throw new MultipleSingletonInSceneException(Instance, this as T);
+            }
+
+            Instance = this as T;
         }
 
-        public static bool InstanceExists() => instance != null;
-
-        private static T FindSingleton(T[] instances)
+        virtual protected void OnDisable()
         {
-            if (instances.Length == 0)
-                throw new SingletonDoesNotExistException();
-            if (instances.Length > 1)
-                throw new MultipleSingletonInSceneException(instances);
-
-            return instances.FirstOrDefault();
+            if (Instance == this)
+                Instance = null;
         }
 
         // Source: https://codereview.stackexchange.com/questions/276679/creating-a-generic-base-class-for-singletons-in-unity
