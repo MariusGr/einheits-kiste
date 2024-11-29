@@ -3,7 +3,10 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+
+#if UNITY_EDITOR
 using SolidUtilities.Editor;
+#endif
 
 namespace EinheitsKiste
 {
@@ -102,7 +105,7 @@ namespace EinheitsKiste.Internal
                     else
                         throw;
                 }
-                
+
             if (before == property.objectReferenceValue) return;
             EditorUtility.SetDirty(property.serializedObject.targetObject);
             property.serializedObject.ApplyModifiedProperties();

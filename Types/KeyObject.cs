@@ -19,7 +19,6 @@ namespace EinheitsKiste
         [field: SerializeField, ConditionalField(true, nameof(EnumTypeIsValid)), DefinedValues(nameof(GetKeyNames), initializeEvent: nameof(EnumTypeChanged))]
         public int Key { get; private set; }
 
-#if UNITY_EDITOR
         private bool EnumTypeIsValid() => EnumType.Type != null;
         private void OnEnumTypeChanged() => EnumTypeChanged?.Invoke(this, null);
 
@@ -45,7 +44,6 @@ namespace EinheitsKiste
             var values = Enum.GetValues(EnumType.Type).Cast<int>();
             return labels.Zip(values, (label, value) => new LabelValuePair(label, value)).ToArray();
         }
-#endif
 
         public class NoKeyObjectFoundException : Exception
         {
