@@ -13,8 +13,8 @@ namespace EinheitsKiste
         public static bool InstanceExists() => Instance != null;
 
         protected void Awake()
-#if UNITY_EDITOR
         {
+#if UNITY_EDITOR
             // Add the this object to the build
             var preloadedAssets = PlayerSettings.GetPreloadedAssets().ToList();
             if (!preloadedAssets.Contains(this))
