@@ -9,7 +9,28 @@ namespace EinheitsKiste
 {
     public class ScriptableObjectSingleton<T> : ScriptableObject where T : ScriptableObject
     {
+#if UNITY_EDITOR
+        private static T _instance;
+        public static T Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    var guids = AssetDatabase.FindAssets($"t:{typeof(T).Name}");
+                    if (guids.Length == 0)
+                        throw new SingletonDoesNotExistException();
+                    if (guids.Length > 1)
+                        throw new MultipleSingletonInSceneException(guids.Select(guid => AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(guid))).ToArray());
+                    _instance = AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(guids[0]));
+                }
+                return _instance;
+            }
+            set => _instance = value;
+        }
+#else
         public static T Instance { get; private set; }
+#endif
         public static bool InstanceExists() => Instance != null;
 
         protected void Awake()
