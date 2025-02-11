@@ -1,11 +1,12 @@
 {
   "dependencies": {
     "com.adammyhre.unity-event-bus": {
-      "version": "file:Unity-Event-Bus",
+      "version": "file:UnityEventBus",
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.domybest.mybox": "git@github.com:MariusGr/MyBox.git"
+        "com.domybest.mybox": "git@github.com:MariusGr/MyBox.git",
+        "com.mariusgripp.einheits-kiste": "git@github.com/MariusGr/einheits-kiste.git"
       }
     },
     "com.domybest.mybox": {
@@ -16,8 +17,24 @@
         "com.unity.ugui": "1.0.0"
       }
     },
+    "com.itisnajim.socketiounity": {
+      "version": "file:SocketIOUnity",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.0.2"
+      }
+    },
     "com.mariusgripp.einheits-kiste": {
       "version": "file:EinheitsKiste",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.solidalloy.util": "1.39.0"
+      }
+    },
+    "com.markusgoebel.simplejson": {
+      "version": "file:SimpleJSON",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
@@ -110,6 +127,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.performance.profile-analyzer": {
       "version": "1.2.2",
       "depth": 1,
@@ -159,9 +183,9 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {
+        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.director": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
-        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
       "url": "https://packages.unity.com"

@@ -6,3 +6,6 @@
 	path = Packages/MyBox
 	url = git@github.com:MariusGr/MyBox.git
 	branch =develop-package
+[submodule "Packages/UnityEventBus"]
+	path = Packages/UnityEventBus
+	url = git@github.com:MariusGr/Unity-Event-Bus.git

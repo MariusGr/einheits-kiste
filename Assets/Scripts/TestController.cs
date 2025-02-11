@@ -8,11 +8,13 @@ using UnityEventBus;
 
 public class TestController : MonoBehaviour
 {
-    [KeyObjectReference(typeof(TestEnum))] public Transform ref1;
-    [KeyObjectReference(typeof(TestEnum2))] public Transform ref2;
-    [AutoProperty] public ISomeInterface someInterface;
-    [DefinedValues(validationMethod: nameof(Validation), definedValues: new object[]{ "Eins", "Zwei", "Drei", "Vier" })] public string strings;
-    [DefinedValues(definedValues: new object[]{ "Eins", "Zwei", "Drei", "Vier" })] public string strings2;
+    [KeyObjectReference(TestEnum.Etwas)] public Transform ref1;
+    [KeyObjectReference(TestEnum2.GanzWasAnderes)] public GameObject ref2;
+    [KeyObjectReference(TestEnum2.NochEtwas)] public AudioSource ref3;
+    [KeyObjectReference(searchOnlyOnSelf: true)] public AudioSource refSelf;
+    [field: SerializeField, KeyObjectReference(TestEnum2.NochEtwas)] public AudioSource Ref4 { get; private set; }
+    [DefinedValues(validationMethod: nameof(Validation), definedValues: new object[] { "Eins", "Zwei", "Drei", "Vier" })] public string strings;
+    [DefinedValues(definedValues: new object[] { "Eins", "Zwei", "Drei", "Vier" })] public string strings2;
     [DefinedValues(nameof(GetEventOptions))] public string eventTest;
 
     private bool Validation(int index, object value)
@@ -27,6 +29,6 @@ public class TestController : MonoBehaviour
     {
         TestSingleton.Instance.Hello();
         print(TestScriptableObjectSingleton.Instance.message);
-        EventBusUtil.RaiseEvent(eventTest);
+        EventBusUtil.RaiseEvent(eventTest, new TestEvent() { health = 100 });
     }
 }
