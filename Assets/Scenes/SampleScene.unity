@@ -834,6 +834,12 @@ MonoBehaviour:
   ref2: {fileID: 292794887}
   ref3: {fileID: 1398241255}
   refSelf: {fileID: 2100388809}
+  child: {fileID: 1571036461}
+  children:
+  - {fileID: 1571036461}
+  - {fileID: 292794887}
+  - {fileID: 1398241251}
+  - {fileID: 1991287148}
   <Ref4>k__BackingField: {fileID: 1398241255}
   strings: Eins
   strings2: Eins

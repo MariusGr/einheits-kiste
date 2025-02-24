@@ -12,6 +12,8 @@ public class TestController : MonoBehaviour
     [KeyObjectReference(TestEnum2.GanzWasAnderes)] public GameObject ref2;
     [KeyObjectReference(TestEnum2.NochEtwas)] public AudioSource ref3;
     [KeyObjectReference(searchOnlyOnSelf: true)] public AudioSource refSelf;
+    [AutoProperty] public GameObject child;
+    [AutoProperty] public GameObject[] children;
     [field: SerializeField, KeyObjectReference(TestEnum2.NochEtwas)] public AudioSource Ref4 { get; private set; }
     [DefinedValues(validationMethod: nameof(Validation), definedValues: new object[] { "Eins", "Zwei", "Drei", "Vier" })] public string strings;
     [DefinedValues(definedValues: new object[] { "Eins", "Zwei", "Drei", "Vier" })] public string strings2;
