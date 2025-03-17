@@ -77,7 +77,7 @@ public class Dashing : MonoBehaviour
 
         // reset the y velocity of the players rigidbody to 0 if needed
         if (resetYVel)
-            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.y);
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.y);
 
         // add the dash force (deayed)
         delayedForceToApply = forceToApply;
