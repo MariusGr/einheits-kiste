@@ -15,12 +15,8 @@ namespace EinheitsKiste
 
         public static T Get(string key)
         {
-            print("get " + key);
             if (_instances.TryGetValue(key, out T instance))
-            {
-                print(instance);
                 return instance;
-            }
 
             instance = GetInstances().Where(i => i.Key == key).FirstOrDefault();
 
@@ -39,7 +35,6 @@ namespace EinheitsKiste
             if (Key.IsNullOrEmpty()) return;
             if (_instances.ContainsKey(Key)) return;
 
-            print("added " + Key);
             _instances.Add(Key, (T)this);
         }
 
@@ -47,7 +42,6 @@ namespace EinheitsKiste
         {
             if (Key.IsNullOrEmpty()) return;
             if (!_instances.ContainsKey(Key)) return;
-            print("removed " + Key);
 
             _instances.Remove(Key);
         }
