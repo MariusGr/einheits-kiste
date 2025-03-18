@@ -6,7 +6,7 @@ using UnityEngine;
 namespace EinheitsKiste
 {
     // TODO Get working with non-ExecuteInEditMode MonoBehaviours
-    public abstract class KeyedMonobehaviour<T> : MonoBehaviour where T : KeyedMonobehaviour<T>
+    public abstract class KeyedMonoBehaviour<T> : MonoBehaviour where T : KeyedMonoBehaviour<T>
     {
         public abstract string Key { get; }
 
