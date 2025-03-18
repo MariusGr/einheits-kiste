@@ -11,7 +11,7 @@ namespace EinheitsKiste
         public abstract string Key { get; }
 
         private static readonly Dictionary<string, T> _instances = new();
-        private static T[] GetInstances() => FindObjectsByType<T>(FindObjectsSortMode.None);
+        protected static T[] GetInstances() => FindObjectsByType<T>(FindObjectsSortMode.None);
 
         public static T Get(string key)
         {
