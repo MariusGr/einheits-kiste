@@ -1,15 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using MyBox;
 using UnityEngine;
 using UnityEventBus;
 
-public struct TestEvent : IEvent
+public class TestEvent : UnityEventBus.Event
 {
     public int health;
 }
 
-public struct PlayerEvent : IEvent
+public class PlayerEvent : UnityEventBus.Event
 {
     public int health;
     public int mana;
