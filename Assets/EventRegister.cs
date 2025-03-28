@@ -4,6 +4,17 @@ using MyBox;
 using UnityEngine;
 using UnityEventBus;
 
+public struct TestEvent : IEvent
+{
+    public int health;
+}
+
+public struct PlayerEvent : IEvent
+{
+    public int health;
+    public int mana;
+}
+
 public class EventRegister : MonoBehaviour
 {
     IEventBinding testEventBinding;
