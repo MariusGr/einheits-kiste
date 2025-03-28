@@ -5,7 +5,7 @@ using System.Linq;
 using MyBox;
 
 [ExecuteInEditMode]
-public class TestKeyedObject : KeyedMonobehaviour<TestKeyedObject>
+public class TestKeyedObject : KeyedMonoBehaviour<TestKeyedObject>
 {
     [SerializeField] private string _key;
     public override string Key => _key;
