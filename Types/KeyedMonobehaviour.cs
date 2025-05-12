@@ -1,24 +1,23 @@
 using System.Collections.Generic;
 using System.Linq;
-using MyBox;
 using UnityEngine;
 
 namespace EinheitsKiste
 {
     // TODO Get working with non-ExecuteInEditMode MonoBehaviours
-    public abstract class KeyedMonoBehaviour<T> : MonoBehaviour where T : KeyedMonoBehaviour<T>
+    public abstract class KeyedMonoBehaviour<T, KT> : MonoBehaviour where T : KeyedMonoBehaviour<T, KT>
     {
-        public abstract string Key { get; }
+        public abstract KT Key { get; }
 
-        private static readonly Dictionary<string, T> _instances = new();
+        private static readonly Dictionary<KT, T> _instances = new();
         public static T[] GetInstances() => FindObjectsByType<T>(FindObjectsSortMode.None);
 
-        public static T Get(string key)
+        public static T Get(KT key)
         {
             if (_instances.TryGetValue(key, out T instance))
                 return instance;
 
-            instance = GetInstances().Where(i => i.Key == key).FirstOrDefault();
+            instance = GetInstances().Where(i => i.Key.Equals(key)).FirstOrDefault();
 
             if (instance != null)
             {
@@ -32,15 +31,15 @@ namespace EinheitsKiste
 
         protected virtual void OnValidate()
         {
-            if (Key.IsNullOrEmpty()) return;
+            if (Key == null) return;
             if (_instances.ContainsKey(Key)) return;
 
             _instances.Add(Key, (T)this);
         }
 
-        protected virtual void OnDestroy()
+        virtual protected void OnDestroy()
         {
-            if (Key.IsNullOrEmpty()) return;
+            if (Key == null) return;
             if (!_instances.ContainsKey(Key)) return;
 
             _instances.Remove(Key);
