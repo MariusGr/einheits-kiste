@@ -33,9 +33,13 @@ public class TestController : MonoBehaviour
         print(TestScriptableObjectSingleton.Instance.message);
         EventBusUtil.RaiseEvent(eventTest, new TestEvent() { health = 100 });
 
-        print(KeyedMonoBehaviour<TestKeyedObject>.Get("hi").gameObject.name);
-        print(KeyedMonoBehaviour<TestKeyedObject>.Get("jooo").gameObject.name);
-        print(KeyedMonoBehaviour<TestKeyedObject>.Get("wasgeht").gameObject.name);
-        print(KeyedMonoBehaviour<TestKeyedObject>.Get("yolo").gameObject.name);
+        print(TestKeyedObject.Get("hi").gameObject.name);
+        print(TestKeyedObject.Get("jooo").gameObject.name);
+        print(TestKeyedObject.Get("wasgeht").gameObject.name);
+        // print(TestKeyedObject.Get("yolo").gameObject.name);
+
+        print(TestEnumKeyedObject.Get(TestEnumKeyedObject.KeyEnum.Eins).gameObject.name);
+        print(TestEnumKeyedObject.Get(TestEnumKeyedObject.KeyEnum.Zwei).gameObject.name);
+        print(TestEnumKeyedObject.Get(TestEnumKeyedObject.KeyEnum.Drei).gameObject.name);
     }
 }
