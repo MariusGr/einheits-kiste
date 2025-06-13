@@ -1,6 +1,5 @@
 namespace KeyObjects
 {
-
     public enum TestEnum
     {
         None = 0,
