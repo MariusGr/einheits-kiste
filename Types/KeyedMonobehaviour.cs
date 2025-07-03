@@ -14,19 +14,25 @@ namespace EinheitsKiste
 
         public static T Get(KT key)
         {
-            if (_instances.TryGetValue(key, out T instance))
-                return instance;
+            if (TryGet(key, out T instance)) return instance;
+            Debug.LogWarning($"No instance of {typeof(T).Name} found with key {key}");
+            return null;
+        }
+
+        public static bool TryGet(KT key, out T instance)
+        {
+            if (_instances.TryGetValue(key, out instance))
+                return true;
 
             instance = GetInstances().Where(i => i.Key.Equals(key)).FirstOrDefault();
 
             if (instance != null)
             {
                 _instances.Add(key, instance);
-                return instance;
+                return true;
             }
 
-            Debug.LogWarning($"No instance of {typeof(T).Name} found with key {key}");
-            return null;
+            return false;
         }
 
         protected virtual void OnValidate()
