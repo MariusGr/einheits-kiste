@@ -132,12 +132,20 @@ namespace EinheitsKiste.Internal
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             var keyObjectReference = (KeyObjectReferenceAttribute)attribute;
-            Initialize(property, keyObjectReference);
+            try
+            {
+                Initialize(property, keyObjectReference);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to initialize {nameof(KeyObjectReferenceAttribute)} for {property.name}: {e}",
+                                 property.serializedObject.targetObject);
+            }
 
             GUI.enabled = false;
             EditorGUI.PropertyField(position, property, label, true);
             GUI.enabled = true;
-        }
+            }
     }
 }
 #endif
