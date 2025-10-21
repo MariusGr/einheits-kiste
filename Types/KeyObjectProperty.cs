@@ -77,7 +77,7 @@ namespace EinheitsKiste.Internal
                     "Please make sure that the provided enum starts with a 'None' entry at index 0.");
 
                 before = property.objectReferenceValue;
-                var newValue = values[keyObjectReference.value];
+                var newValue = keyObjectReference.value;
 
                 if (newValue == 0)
                     property.objectReferenceValue = null;
