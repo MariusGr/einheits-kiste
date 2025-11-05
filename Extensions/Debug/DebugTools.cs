@@ -1,12 +1,15 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace EinheitsKiste
 {
     public static partial class DebugTools
     {
-        public static void DrawLine(Vector3 start, Vector3 end) => Debug.DrawLine(start, end, Color.red, Time.deltaTime, false);
-        public static void DrawLine(Vector3 start, Vector3 end, Color color) => Debug.DrawLine(start, end, color, Time.deltaTime, false);
+        public static void DrawLine(Vector3 start, Vector3 end) => Debug.DrawLine(start, end, Color.red, Mathf.Infinity, false);
+        public static void DrawLine(Vector3 start, Vector3 end, Color color) => Debug.DrawLine(start, end, color, Mathf.Infinity, false);
+        public static void DrawLine(Vector3 start, Vector3 end, float duration) => Debug.DrawLine(start, end, Color.red, duration, false);
+        public static void DrawLine(Vector3 start, Vector3 end, Color color, float duration) => Debug.DrawLine(start, end, color, duration, false);
 
         public static void DrawPoint(Vector3 point, float size = .1f, bool depthTest = false) =>
             DrawPoint(point, Color.red, size, depthTest);
@@ -42,13 +45,14 @@ namespace EinheitsKiste
         {
             try
             {
-                Debug.Log($"{message} with length: {((IList)message).Count}");
+                Debug.Log($"{message} with length: {((ICollection)message).Count}");
             }
             catch
             {
-                Debug.Log(message);
-                if (message.GetType() == typeof(string))
-                    return;
+                int count = 0;
+                while (message.GetEnumerator().MoveNext())
+                    count++;
+                Debug.Log($"{message} with length: {count}");
             }
             foreach (object item in message)
             {
@@ -86,6 +90,25 @@ namespace EinheitsKiste
                     Debug.Log($"\t{key}: <No Item>");
                 }
             }
+        }
+
+        public static void LogTransformPath(GameObject gameObject)
+        {
+            Transform parent = gameObject.transform.parent;
+            List<Transform> parents = new();
+            while (parent != null)
+            {
+                parents.Add(parent);
+                parent = parent.parent;
+            }
+
+            parents.Reverse();
+
+            string path = "/";
+            foreach (var p in parents)
+                path += $"{p.gameObject.name}/";
+
+            Debug.Log(path + gameObject.name);
         }
     }
 }
