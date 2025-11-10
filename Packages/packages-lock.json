@@ -18,7 +18,7 @@
       }
     },
     "com.mariusgripp.einheits-kiste": {
-      "version": "file:EinheitsKiste",
+      "version": "file:einheits-kiste-package",
       "depth": 0,
       "source": "embedded",
       "dependencies": {

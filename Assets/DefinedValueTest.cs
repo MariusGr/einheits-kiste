@@ -12,10 +12,7 @@ public class DefinedValueTest : MonoBehaviour
     public Entry[] entries;
     public string[] names;
 
-    void OnDrawGizmos()
-    {
-        DrawArrow.ForGizmo(transform.position, Vector3.forward);
-    }
+    void OnDrawGizmos() => DebugTools.DrawArrow.ForGizmo(transform.position, Vector3.forward);
 }
 
 [System.Serializable]

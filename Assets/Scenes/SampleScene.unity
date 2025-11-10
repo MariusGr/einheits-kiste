@@ -1000,13 +1000,13 @@ MonoBehaviour:
     - cc
     - dd
     - jj
-    selection: cc
+    selection: aa
   - showThat: 0
     that: That
     names:
     - zz
     - yy
-    selection: zz
+    selection: yy
   names:
   - moin
   - hi

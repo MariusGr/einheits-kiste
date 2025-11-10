@@ -1,5 +1,6 @@
 using UnityEngine;
 using MyBox;
+using EinheitsKiste;
 
 public class DefinedValueForEnum : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class DefinedValueForEnum : MonoBehaviour
     [DefinedValues(nameof(GetValuesEnum))] public TestEnum enumValue;
     private TestEnum[] GetValuesEnum()
     {
+        this.EmptyCoroutine();
         return (TestEnum[])System.Enum.GetValues(typeof(TestEnum));
     }
 }
