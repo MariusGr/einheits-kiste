@@ -40,6 +40,11 @@ public class TestController : MonoBehaviour
 
         print(TestEnumKeyedObject.Get(TestEnumKeyedObject.KeyEnum.Eins).gameObject.name);
         print(TestEnumKeyedObject.Get(TestEnumKeyedObject.KeyEnum.Zwei).gameObject.name);
-        print(TestEnumKeyedObject.Get(TestEnumKeyedObject.KeyEnum.Drei).gameObject.name);
+        // print(TestEnumKeyedObject.Get(TestEnumKeyedObject.KeyEnum.Drei).gameObject.name);
+
+        foreach (var obj in TestKeyedPrefab.GetInstances())
+        {
+            print($"TestKeyedPrefab with key {obj.Key}: {obj.gameObject.name}");
+        }
     }
 }
