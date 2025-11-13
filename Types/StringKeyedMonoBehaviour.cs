@@ -2,7 +2,7 @@ using MyBox;
 
 namespace EinheitsKiste
 {
-    public abstract class StringKeyedMonoBehaviour<T> : KeyedMonoBehaviour<T, string> where T : KeyedMonoBehaviour<T, string>
+    public abstract class StringKeyedMonoBehaviour<T> : KeyedMonoBehaviour<T, string, KeyedMonoBehaviourMode.IInstancesInSceneThenAssetsMode> where T : KeyedMonoBehaviour<T, string, KeyedMonoBehaviourMode.IInstancesInSceneThenAssetsMode>
     {
         override protected void OnValidate()
         {
