@@ -18,7 +18,7 @@ namespace EinheitsKiste
         Vertical,
     }
 
-    public static class Utils
+    public static class DirectionUtils
     {
         public static Dictionary<Direction, Direction> DirectionInverse = new()
         {
