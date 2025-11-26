@@ -48,16 +48,58 @@ namespace EinheitsKiste
             onUpdate(target);
         }
 
+        // Position and Rotation only
         public static IEnumerator Lerp(Transform target,
                                        Vector3 targetPosition,
                                        Quaternion targetRotation,
                                        float time,
                                        Func<float, float> easingFunction = null)
-         => Lerp(target, () => targetPosition, () => targetRotation, time, easingFunction);
+            => Lerp(target, () => targetPosition, () => targetRotation, time, easingFunction);
 
         public static IEnumerator Lerp(Transform target,
                                        Func<Vector3> targetPosition,
                                        Func<Quaternion> targetRotation,
+                                       float time,
+                                       Func<float, float> easingFunction = null)
+        {
+            var scale = target.localScale;
+            return Lerp(target, targetPosition, targetRotation, () => scale, time, easingFunction);
+        }
+
+        // Position and Scale only
+        public static IEnumerator Lerp(Transform target,
+                                       Vector3 targetPosition,
+                                       Vector3 targetScale,
+                                       float time,
+                                       Func<float, float> easingFunction = null)
+        {
+            var rotation = target.localRotation;
+            return Lerp(target, () => targetPosition, () => rotation, () => targetScale, time, easingFunction);
+        }
+
+        public static IEnumerator Lerp(Transform target,
+                                       Func<Vector3> targetPosition,
+                                       Func<Vector3> targetScale,
+                                       float time,
+                                       Func<float, float> easingFunction = null)
+        {
+            var rotation = target.localRotation;
+            return Lerp(target, targetPosition, () => rotation, targetScale, time, easingFunction);
+        }
+
+        // Full version
+        public static IEnumerator Lerp(Transform target,
+                                       Vector3 targetPosition,
+                                       Quaternion targetRotation,
+                                       Vector3 targetScale,
+                                       float time,
+                                       Func<float, float> easingFunction = null)
+            => Lerp(target, () => targetPosition, () => targetRotation, () => targetScale, time, easingFunction);
+
+        public static IEnumerator Lerp(Transform target,
+                                       Func<Vector3> targetPosition,
+                                       Func<Quaternion> targetRotation,
+                                       Func<Vector3> targetScale,
                                        float time,
                                        Func<float, float> easingFunction = null)
         {
@@ -72,6 +114,7 @@ namespace EinheitsKiste
 
             float elapsedTime = 0f;
             target.GetLocalPositionAndRotation(out Vector3 startingPosition, out Quaternion startingRotation);
+            Vector3 startingScale = target.localScale;
 
             while (elapsedTime < time)
             {
@@ -79,6 +122,7 @@ namespace EinheitsKiste
                 float easedT = easingFunction(t);
                 target.SetLocalPositionAndRotation(
                     Vector3.Lerp(startingPosition, targetPosition(), easedT), Quaternion.Lerp(startingRotation, targetRotation(), easedT));
+                target.localScale = Vector3.Lerp(startingScale, targetScale(), easedT);
 
                 elapsedTime += Time.deltaTime;
                 yield return null;
