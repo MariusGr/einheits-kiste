@@ -87,6 +87,26 @@ namespace EinheitsKiste
             return Lerp(target, targetPosition, () => rotation, targetScale, time, easingFunction);
         }
 
+        // Position only
+        public static IEnumerator LerpPosition(Transform target,
+                                       Vector3 targetPosition,
+                                       float time,
+                                       Func<float, float> easingFunction = null)
+        {
+            target.GetLocalPositionAndRotation(out _, out var rotation);
+            return Lerp(target, () => targetPosition, () => rotation, () => target.localScale, time, easingFunction);
+        }
+
+        // Scale only
+        public static IEnumerator LerpScale(Transform target,
+                                       Vector3 targetScale,
+                                       float time,
+                                       Func<float, float> easingFunction = null)
+        {
+            target.GetLocalPositionAndRotation(out var position, out var rotation);
+            return Lerp(target, () => position, () => rotation, () => targetScale, time, easingFunction);
+        }
+
         // Full version
         public static IEnumerator Lerp(Transform target,
                                        Vector3 targetPosition,
@@ -96,6 +116,7 @@ namespace EinheitsKiste
                                        Func<float, float> easingFunction = null)
             => Lerp(target, () => targetPosition, () => targetRotation, () => targetScale, time, easingFunction);
 
+        // TODO Refactor so that not all lerps are being calculated if not needed
         public static IEnumerator Lerp(Transform target,
                                        Func<Vector3> targetPosition,
                                        Func<Quaternion> targetRotation,
