@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 
 namespace EinheitsKiste
@@ -8,3 +9,4 @@ namespace EinheitsKiste
             => obj.FindProperty($"<{propertyName}>k__BackingField");
     }
 }
+#endif
