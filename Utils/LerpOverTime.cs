@@ -97,6 +97,16 @@ namespace EinheitsKiste
             return Lerp(target, () => targetPosition, () => rotation, () => target.localScale, time, easingFunction);
         }
 
+        // Rotation only
+        public static IEnumerator LerpRotation(Transform target,
+                                        Quaternion targetRotation,
+                                        float time,
+                                        Func<float, float> easingFunction = null)
+          {
+                target.GetLocalPositionAndRotation(out var position, out _);
+                return Lerp(target, () => position, () => targetRotation, () => target.localScale, time, easingFunction);
+          }
+
         // Scale only
         public static IEnumerator LerpScale(Transform target,
                                        Vector3 targetScale,
