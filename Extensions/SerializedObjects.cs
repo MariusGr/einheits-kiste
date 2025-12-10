@@ -6,7 +6,7 @@ namespace EinheitsKiste
     public static class SerializedObjects
     {
         public static SerializedProperty FindPropertyByAutoName(this SerializedObject obj, string propertyName)
-            => obj.FindProperty($"<{propertyName}>k__BackingField");
+            => obj.FindProperty(Property.GetBackingFieldName(propertyName));
     }
 }
 #endif
