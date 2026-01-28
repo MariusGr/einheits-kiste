@@ -17,15 +17,16 @@ namespace EinheitsKiste
             {
                 if (_prefabSingletonsCache == null)
                 {
-                    _prefabSingletonsCache = _prefabSingletons.ToDictionary(
-                        prefab =>
-                        {
-                            if (prefab.TryGetComponent<ISingletonMonoBehaviour>(out var component)) return component.GetType();
-                            if (prefab.TryGetComponent<MonoBehaviour>(out var monoBehaviour)) return monoBehaviour.GetType();
-                            Debug.LogError($"Prefab {prefab.name} does not have a MonoBehaviour component", prefab);
-                            return null;
-                        },
-                        prefab => prefab);
+                    _prefabSingletonsCache = new();
+                    foreach (var prefab in _prefabSingletons)
+                    {
+                        Type type = null;
+                        if (prefab.TryGetComponent<ISingletonMonoBehaviour>(out var component)) type = component.GetType();
+                        else if (prefab.TryGetComponent<MonoBehaviour>(out var monoBehaviour)) type = monoBehaviour.GetType();
+
+                        if (type != null) _prefabSingletonsCache[type] = prefab;
+                    }
+                        
                 }
                 return _prefabSingletonsCache;
             }
