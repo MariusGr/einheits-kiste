@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 namespace EinheitsKiste
 {
-
     public interface ISingletonMonoBehaviour { }
 
     public class SingletonMonoBehaviour<T> : MonoBehaviour, ISingletonMonoBehaviour where T : SingletonMonoBehaviour<T>

@@ -20,13 +20,13 @@ namespace EinheitsKiste
         {
             if (typeof(T) is ISingletonMonoBehaviour)
             {
-                var instance = UnityEngine.Object.FindObjectsByType<T>(FindObjectsSortMode.None).FirstOrDefault();
+                var instance = Object.FindObjectsByType<T>(FindObjectsSortMode.None).FirstOrDefault();
                 if (instance != default) return instance;
             }
 
             var singletonObject = new GameObject(typeof(T).Name);
             var singleton = singletonObject.AddComponent<T>();
-            UnityEngine.Object.DontDestroyOnLoad(singletonObject);
+            Object.DontDestroyOnLoad(singletonObject);
             return singleton;
         }
 
@@ -34,15 +34,15 @@ namespace EinheitsKiste
         {
             if (typeof(T) is ISingletonMonoBehaviour)
             {
-                var instance = UnityEngine.Object.FindObjectsByType<T>(FindObjectsSortMode.None).FirstOrDefault();
+                var instance = Object.FindObjectsByType<T>(FindObjectsSortMode.None).FirstOrDefault();
                 if (instance != default) return instance;
             }
 
             if (!CheckIfSingletonPrefabsExists()) return null;
 
             var prefab = SingletonPrefabs.Instance.PrefabSingletons[typeof(T)];
-            var g = UnityEngine.Object.Instantiate(prefab);
-            UnityEngine.Object.DontDestroyOnLoad(g);
+            var g = Object.Instantiate(prefab);
+            Object.DontDestroyOnLoad(g);
 
             if (!g.TryGetComponent<T>(out var singleton))
             {
@@ -58,8 +58,8 @@ namespace EinheitsKiste
 
             foreach (var prefab in SingletonPrefabs.Instance.Prefabs)
             {
-                var g = UnityEngine.Object.Instantiate(prefab);
-                UnityEngine.Object.DontDestroyOnLoad(g);
+                var g = Object.Instantiate(prefab);
+                Object.DontDestroyOnLoad(g);
             }
         }
     }
