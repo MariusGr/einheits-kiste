@@ -30,6 +30,7 @@ namespace EinheitsKiste
                 return _prefabSingletonsCache;
             }
         }
+        public IEnumerable<GameObject> Prefabs => PrefabSingletons.Values;
 
         private void OnValidate()
         {
