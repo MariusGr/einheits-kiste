@@ -16,6 +16,20 @@ namespace EinheitsKiste
             SingletonMonoBehaviour<T>._instance = singleton;
             return singleton;
         }
+
+        protected static T InstantiatePrefab<T>(GameObject prefab) where T : SingletonMonoBehaviour<T>
+        {
+            var g = UnityEngine.Object.Instantiate(prefab);
+            UnityEngine.Object.DontDestroyOnLoad(g);
+
+            if (!g.TryGetComponent<T>(out var singleton))
+            {
+                Debug.LogError($"Prefab {prefab.name} does not contain component of type {typeof(T)}", prefab);
+            }
+
+            SingletonMonoBehaviour<T>._instance = singleton;
+            return singleton;
+        }
     }
 
     public class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBehaviour<T>
