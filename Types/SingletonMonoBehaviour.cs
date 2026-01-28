@@ -8,23 +8,32 @@ namespace EinheitsKiste
 {
     public class SingletonMonoBehaviourInstantiator
     {
-        protected static T Instantiate<T>() where T : SingletonMonoBehaviour<T>
+        protected static T Instantiate<T>() where T : MonoBehaviour
         {
+            if (typeof(T) is ISingletonMonoBehaviour)
+            {
+                var instance = UnityEngine.Object.FindObjectsByType<T>(FindObjectsSortMode.None).FirstOrDefault();
+                if (instance != default) return instance;
+            }
+
             var singletonObject = new GameObject(typeof(T).Name);
             var singleton = singletonObject.AddComponent<T>();
             UnityEngine.Object.DontDestroyOnLoad(singletonObject);
-            SingletonMonoBehaviour<T>._instance = singleton;
             return singleton;
         }
 
-        protected static T InstantiatePrefab<T>() where T : SingletonMonoBehaviour<T>
+        protected static T InstantiatePrefab<T>() where T : MonoBehaviour
         {
-            if (SingletonMonoBehaviour<T>.InstanceExists()) return SingletonMonoBehaviour<T>.Instance;
+            if (typeof(T) is ISingletonMonoBehaviour)
+            {
+                var instance = UnityEngine.Object.FindObjectsByType<T>(FindObjectsSortMode.None).FirstOrDefault();
+                if (instance != default) return instance;
+            }
 
             if (!SingletonPrefabs.InstanceExists())
             {
                 Debug.LogError($"{nameof(SingletonPrefabs)} instance does not exist. Cannot instantiate singleton prefab." +
-                               " Please create one in the project with Create -> EinheitsKiste -> Singleton Prefabs.", null);
+                            " Please create one in the project with Create -> EinheitsKiste -> Singleton Prefabs.", null);
                 return null;
             }
 
@@ -37,7 +46,6 @@ namespace EinheitsKiste
                 Debug.LogError($"Prefab {prefab.name} does not contain component of type {typeof(T)}", prefab);
             }
 
-            SingletonMonoBehaviour<T>._instance = singleton;
             return singleton;
         }
     }
@@ -74,7 +82,7 @@ namespace EinheitsKiste
             _instance = FindSingleton(instances);
         }
 
-        private static T FindSingleton(T[] instances)
+        public static T FindSingleton(T[] instances)
         {
             if (instances.Length == 0)
                 throw new SingletonDoesNotExistException();

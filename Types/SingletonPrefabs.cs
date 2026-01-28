@@ -18,7 +18,13 @@ namespace EinheitsKiste
                 if (_prefabSingletonsCache == null)
                 {
                     _prefabSingletonsCache = _prefabSingletons.ToDictionary(
-                        prefab => prefab.GetComponent<ISingletonMonoBehaviour>().GetType(),
+                        prefab =>
+                        {
+                            if (prefab.TryGetComponent<ISingletonMonoBehaviour>(out var component)) return component.GetType();
+                            if (prefab.TryGetComponent<MonoBehaviour>(out var monoBehaviour)) return monoBehaviour.GetType();
+                            Debug.LogError($"Prefab {prefab.name} does not have a MonoBehaviour component", prefab);
+                            return null;
+                        },
                         prefab => prefab);
                 }
                 return _prefabSingletonsCache;
@@ -27,15 +33,6 @@ namespace EinheitsKiste
 
         private void OnValidate()
         {
-            var missingSingletons = _prefabSingletons
-                .Where(prefab => !prefab.TryGetComponent<ISingletonMonoBehaviour>(out _))
-                .ToList();
-            
-            foreach (var prefab in missingSingletons)
-            {
-                Debug.LogError($"Prefab {prefab.name} does not contain a component implementing ISingletonMonoBehaviour", this);
-            }
-
             var duplicateValues = _prefabSingletons
                 .GroupBy(prefab => prefab)
                 .Where(group => group.Count() > 1)
@@ -44,6 +41,14 @@ namespace EinheitsKiste
             foreach (var group in duplicateValues)
             {
                 Debug.LogError($"Duplicate singleton prefab found: {group.Key.name}", this);
+            }
+
+            foreach (var prefab in _prefabSingletons)
+            {
+                if (!prefab.TryGetComponent<MonoBehaviour>(out var monoBehaviour))
+                {
+                    Debug.LogError($"Prefab {prefab.name} does not have a MonoBehaviour component", prefab);
+                }
             }
         }
     }
