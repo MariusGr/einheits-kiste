@@ -6,34 +6,46 @@ using UnityEngine.SceneManagement;
 
 namespace EinheitsKiste
 {
-    public class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBehaviour
+    public class SingletonMonoBehaviourInstantiator
     {
-        private static T instance;
+        protected static T Instantiate<T>() where T : SingletonMonoBehaviour<T>
+        {
+            var singletonObject = new GameObject(typeof(T).Name);
+            var singleton = singletonObject.AddComponent<T>();
+            UnityEngine.Object.DontDestroyOnLoad(singletonObject);
+            SingletonMonoBehaviour<T>._instance = singleton;
+            return singleton;
+        }
+    }
+
+    public class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBehaviour<T>
+    {
+        internal static T _instance;
         public static T Instance
         {
             get
             {
                 if (!InstanceExists())
-                    instance = FindSingleton(FindObjectsByType<T>(FindObjectsSortMode.None));
-                return instance;
+                    _instance = FindSingleton(FindObjectsByType<T>(FindObjectsSortMode.None));
+                return _instance;
             }
         }
 
-        public static bool InstanceExists() => instance != null;
+        public static bool InstanceExists() => _instance != null;
 
         virtual protected void Awake()
         {
             bool instanceExists = InstanceExists();
             // Instance already set, but it is this object: skip initialisation
-            if (instanceExists && instance.GetInstanceID() == GetInstanceID())
+            if (instanceExists && _instance.GetInstanceID() == GetInstanceID())
                 return;
 
             var instances = gameObject.GetComponents<T>();
             // Check if another isntance is already stored in instance
             if (instanceExists)
-                throw new MultipleSingletonInSceneException(new HashSet<T>(instances) { instance }.ToArray());
+                throw new MultipleSingletonInSceneException(new HashSet<T>(instances) { _instance }.ToArray());
 
-            instance = FindSingleton(instances);
+            _instance = FindSingleton(instances);
         }
 
         private static T FindSingleton(T[] instances)
