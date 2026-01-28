@@ -17,8 +17,18 @@ namespace EinheitsKiste
             return singleton;
         }
 
-        protected static T InstantiatePrefab<T>(GameObject prefab) where T : SingletonMonoBehaviour<T>
+        protected static T InstantiatePrefab<T>() where T : SingletonMonoBehaviour<T>
         {
+            if (SingletonMonoBehaviour<T>.InstanceExists()) return SingletonMonoBehaviour<T>.Instance;
+
+            if (!SingletonPrefabs.InstanceExists())
+            {
+                Debug.LogError($"{nameof(SingletonPrefabs)} instance does not exist. Cannot instantiate singleton prefab." +
+                               " Please create one in the project with Create -> EinheitsKiste -> Singleton Prefabs.", null);
+                return null;
+            }
+
+            var prefab = SingletonPrefabs.Instance.PrefabSingletons[typeof(T)];
             var g = UnityEngine.Object.Instantiate(prefab);
             UnityEngine.Object.DontDestroyOnLoad(g);
 
@@ -32,7 +42,9 @@ namespace EinheitsKiste
         }
     }
 
-    public class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBehaviour<T>
+    public interface ISingletonMonoBehaviour { }
+
+    public class SingletonMonoBehaviour<T> : MonoBehaviour, ISingletonMonoBehaviour where T : SingletonMonoBehaviour<T>
     {
         internal static T _instance;
         public static T Instance

@@ -2,31 +2,13 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using SolidUtilities.Collections;
-using TypeReferences;
-using System.Runtime.InteropServices;
 
 namespace EinheitsKiste
 {
     [CreateAssetMenu(fileName = "SingletonPrefabs", menuName = "EinheitsKiste/Singleton Prefabs")]
     public class SingletonPrefabs : ScriptableObjectSingleton<SingletonPrefabs>
     {
-        [Serializable]
-        public struct SingletonPrefab
-        {
-            [field: SerializeField, Inherits(typeof(MonoBehaviour))] public TypeReference Type { get; private set; }
-            [field: SerializeField] public GameObject Prefab { get; private set; }
-
-            public override readonly bool Equals(object obj)
-            {
-                if (obj is SingletonPrefab other) return Type.Type == other.Type.Type && Prefab == other.Prefab;
-                return false;
-            }
-
-            public override readonly int GetHashCode() => HashCode.Combine(Type.Type, Prefab);
-        }
-
-        [SerializeField] private SingletonPrefab[] _prefabSingletons;
+        [SerializeField] private GameObject[] _prefabSingletons;
 
         private Dictionary<Type, GameObject> _prefabSingletonsCache;
         public IReadOnlyDictionary<Type, GameObject> PrefabSingletons
@@ -36,8 +18,8 @@ namespace EinheitsKiste
                 if (_prefabSingletonsCache == null)
                 {
                     _prefabSingletonsCache = _prefabSingletons.ToDictionary(
-                        prefab => prefab.Type.Type,
-                        prefab => prefab.Prefab);
+                        prefab => prefab.GetComponent<ISingletonMonoBehaviour>().GetType(),
+                        prefab => prefab);
                 }
                 return _prefabSingletonsCache;
             }
@@ -45,24 +27,23 @@ namespace EinheitsKiste
 
         private void OnValidate()
         {
-            var duplicateKeys = _prefabSingletons
-                .GroupBy(prefab => prefab.Type.Type)
-                .Where(group => group.Count() > 1)
+            var missingSingletons = _prefabSingletons
+                .Where(prefab => !prefab.TryGetComponent<ISingletonMonoBehaviour>(out _))
                 .ToList();
-
-            foreach (var group in duplicateKeys)
+            
+            foreach (var prefab in missingSingletons)
             {
-                Debug.LogError($"Duplicate singleton prefab type found: {group.Key}", this);
+                Debug.LogError($"Prefab {prefab.name} does not contain a component implementing ISingletonMonoBehaviour", this);
             }
 
             var duplicateValues = _prefabSingletons
-                .GroupBy(prefab => prefab.Prefab)
+                .GroupBy(prefab => prefab)
                 .Where(group => group.Count() > 1)
                 .ToList();
 
             foreach (var group in duplicateValues)
             {
-                Debug.LogError($"Duplicate singleton prefab found: {group.Key}", this);
+                Debug.LogError($"Duplicate singleton prefab found: {group.Key.name}", this);
             }
         }
     }
