@@ -43,14 +43,6 @@ namespace EinheitsKiste
             {
                 Debug.LogError($"Duplicate singleton prefab found: {group.Key.name}", this);
             }
-
-            foreach (var prefab in _prefabSingletons)
-            {
-                if (!prefab.TryGetComponent<MonoBehaviour>(out var monoBehaviour))
-                {
-                    Debug.LogError($"Prefab {prefab.name} does not have a MonoBehaviour component", prefab);
-                }
-            }
         }
     }
 }
