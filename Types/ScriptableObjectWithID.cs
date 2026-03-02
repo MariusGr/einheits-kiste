@@ -7,16 +7,16 @@ namespace EinheitsKiste
 {
     public abstract class ScriptableObjectWithID : ScriptableObject, ISerializationCallbackReceiver
     {
-        [field: SerializeField, ReadOnly] public string Id { get; private set; }
+        [field: SerializeField, ReadOnly] public string ID { get; private set; }
 
 #if UNITY_EDITOR
         private void AssignNewUID()
         {
             string path = AssetDatabase.GetAssetPath(this);
             var id = AssetDatabase.AssetPathToGUID(path);
-            if (Id != id)
+            if (ID != id)
             {
-                Id = id;
+                ID = id;
                 RegisterInstance();
                 EditorUtility.SetDirty(this);
             }
@@ -27,7 +27,7 @@ namespace EinheitsKiste
 
         protected virtual void OnEnable()
         {
-            if (Id.IsNullOrEmpty())
+            if (ID.IsNullOrEmpty())
                 Debug.LogError($"{GetType()} has no ID: {name}");
             else
             {
@@ -50,6 +50,6 @@ namespace EinheitsKiste
     {
         private static readonly Dictionary<string, ScriptableObjectWithID<T>> instances = new();
         public static T Get(string id) => (T)instances[id];
-        protected override void RegisterInstance() => instances[Id] = this as T;
+        protected override void RegisterInstance() => instances[ID] = this as T;
     }
 }
