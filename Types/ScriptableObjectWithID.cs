@@ -10,7 +10,7 @@ namespace EinheitsKiste
         [field: SerializeField, ReadOnly] public string ID { get; private set; }
 
 #if UNITY_EDITOR
-        private void AssignNewUID()
+        private void AssignNewGuid()
         {
             string path = AssetDatabase.GetAssetPath(this);
             var id = AssetDatabase.AssetPathToGUID(path);
@@ -38,7 +38,7 @@ namespace EinheitsKiste
         public void OnBeforeSerialize()
         {
 #if UNITY_EDITOR
-            AssignNewUID();
+            AssignNewGuid();
             RegisterInstance();
 #endif
         }
