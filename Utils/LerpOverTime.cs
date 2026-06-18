@@ -25,13 +25,13 @@ namespace EinheitsKiste
 
     public static class LerpOverTime
     {
-        public static IEnumerator Lerp(float start, float target, float time, Action<float> onUpdate, Func<float, float> easingFunction = null)
+        public static IEnumerator Lerp(float start, float target, float time, Action<float> onUpdate = null, Func<float, float> easingFunction = null)
         {
             easingFunction ??= EasingFunctions.Linear;
 
             if (time <= 0f)
             {
-                onUpdate(target);
+                onUpdate?.Invoke(target);
                 yield break;
             }
 
@@ -40,12 +40,12 @@ namespace EinheitsKiste
             {
                 float t = elapsedTime / time;
                 float easedT = easingFunction(t);
-                onUpdate(Mathf.Lerp(start, target, easedT));
+                onUpdate?.Invoke(Mathf.Lerp(start, target, easedT));
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
 
-            onUpdate(target);
+            onUpdate?.Invoke(target);
         }
 
         // Position and Rotation only
