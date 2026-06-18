@@ -26,10 +26,12 @@ namespace EinheitsKiste
         public readonly Type enumType;
         public readonly int value;
         public readonly bool searchOnlyOnSelf;
+        public readonly bool allowEmpty;
 
-        public KeyObjectReferenceAttribute(object enumValue = null, bool searchOnlyOnSelf = false)
+        public KeyObjectReferenceAttribute(object enumValue = null, bool searchOnlyOnSelf = false, bool allowEmpty = false)
         {
             this.searchOnlyOnSelf = searchOnlyOnSelf;
+            this.allowEmpty = allowEmpty;
 
             if (enumValue == null)
                 return;
@@ -109,7 +111,10 @@ namespace EinheitsKiste.Internal
                     {
                         if (e is KeyObject.MoreThanOneKeyObjectsFoundException || e is KeyObject.NoKeyObjectFoundException)
                         {
-                            Debug.LogWarning($"Had to reset {property.name} of {property.serializedObject.targetObject} because of Exception: {e}");
+                            if (!keyObjectReference.allowEmpty)
+                            {
+                                Debug.LogWarning($"Had to reset {property.name} of {property.serializedObject.targetObject} because of Exception: {e}");
+                            }
                             property.objectReferenceValue = null;
                         }
                         else
@@ -145,7 +150,7 @@ namespace EinheitsKiste.Internal
             GUI.enabled = false;
             EditorGUI.PropertyField(position, property, label, true);
             GUI.enabled = true;
-            }
+        }
     }
 }
 #endif
