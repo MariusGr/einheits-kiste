@@ -27,7 +27,7 @@ namespace EinheitsKiste
         {
             bool instanceExists = InstanceExists();
             // Instance already set, but it is this object: skip initialisation
-            if (instanceExists && _instance.GetInstanceID() == GetInstanceID())
+            if (instanceExists && _instance.GetEntityId() == GetEntityId())
                 return;
 
             var instances = gameObject.GetComponents<T>();
