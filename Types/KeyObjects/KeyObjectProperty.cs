@@ -56,12 +56,19 @@ namespace EinheitsKiste.Internal
     [CustomPropertyDrawer(typeof(KeyObjectReferenceAttribute))]
     public class KeyObjectPropertyDrawer : PropertyDrawer
     {
-        private bool initialized;
+        private UnityEngine.Object lastTargetObject;
 
         private void Initialize(SerializedProperty property, KeyObjectReferenceAttribute keyObjectReference)
         {
-            if (initialized) return;
-            initialized = true;
+            // Reset initialization if the target object changed (e.g., due to duplication or selection change)
+            if (lastTargetObject != property.serializedObject.targetObject)
+            {
+                lastTargetObject = property.serializedObject.targetObject;
+            }
+            else
+            {
+                return;
+            }
 
             var enumType = keyObjectReference.enumType;
             UnityEngine.Object before = null;
