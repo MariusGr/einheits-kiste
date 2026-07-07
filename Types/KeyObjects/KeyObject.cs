@@ -12,6 +12,9 @@ namespace EinheitsKiste
     {
         public event EventHandler EnumTypeChanged;
         private const string KEY_OBJECT_NAMESPACE = "KeyObjects.";
+        private static LabelValuePair[] _cachedEnumTypeNames;
+        private static int _cachedEnumTypeAssemblyCount = -1;
+        private static readonly Dictionary<Type, LabelValuePair[]> _cachedKeyNames = new();
 
         [field: SerializeField, DefinedValues(nameof(GetEnumTypeNames), valueChangedMethod: nameof(OnEnumTypeChanged))]
         public TypeReference EnumType { get; private set; }
@@ -24,25 +27,59 @@ namespace EinheitsKiste
 
         private LabelValuePair[] GetEnumTypeNames()
         {
-            List<string> labels = new() { "None" };
-            List<object> values = new() { null };
-            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            if (_cachedEnumTypeNames != null && _cachedEnumTypeAssemblyCount == assemblies.Length)
             {
-                foreach (Type t in a.GetTypes().Where(t => t.IsEnum && t.FullName.Contains(KEY_OBJECT_NAMESPACE)))
+                return _cachedEnumTypeNames;
+            }
+
+            var entries = new List<LabelValuePair> { new("None", null) };
+            foreach (Assembly assembly in assemblies)
+            {
+                foreach (Type t in GetAssemblyTypes(assembly))
                 {
-                    labels.Add(t.FullName.Split(KEY_OBJECT_NAMESPACE)[1]);
-                    values.Add(t);
+                    if (!t.IsEnum || t.FullName == null) continue;
+
+                    int namespaceStart = t.FullName.IndexOf(KEY_OBJECT_NAMESPACE, StringComparison.Ordinal);
+                    if (namespaceStart < 0) continue;
+
+                    string label = t.FullName[(namespaceStart + KEY_OBJECT_NAMESPACE.Length)..];
+                    entries.Add(new LabelValuePair(label, t));
                 }
             }
 
-            return labels.Zip(values, (label, value) => new LabelValuePair(label, value)).ToArray();
+            _cachedEnumTypeNames = entries.ToArray();
+            _cachedEnumTypeAssemblyCount = assemblies.Length;
+            return _cachedEnumTypeNames;
         }
 
         private LabelValuePair[] GetKeyNames()
         {
-            var labels = Enum.GetNames(EnumType.Type);
-            var values = Enum.GetValues(EnumType.Type).Cast<int>();
-            return labels.Zip(values, (label, value) => new LabelValuePair(label, value)).ToArray();
+            var enumType = EnumType?.Type;
+            if (enumType == null || !enumType.IsEnum) return Array.Empty<LabelValuePair>();
+            if (_cachedKeyNames.TryGetValue(enumType, out var cachedEntries)) return cachedEntries;
+
+            var labels = Enum.GetNames(enumType);
+            var values = Enum.GetValues(enumType).Cast<int>();
+            cachedEntries = labels.Zip(values, (label, value) => new LabelValuePair(label, value)).ToArray();
+            _cachedKeyNames[enumType] = cachedEntries;
+            return cachedEntries;
+        }
+
+        private static IEnumerable<Type> GetAssemblyTypes(Assembly assembly)
+        {
+            try
+            {
+                return assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                return ex.Types.Where(t => t != null);
+            }
+            catch
+            {
+                return Array.Empty<Type>();
+            }
         }
 
         public class NoKeyObjectFoundException : Exception
