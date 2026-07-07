@@ -83,7 +83,7 @@ namespace EinheitsKiste.Internal
 
                 if (labels.First().ToLower() != "none" || values.First() != 0)
                     Debug.LogWarning($"It appears that the provided enum '{enumType}' does not have a 'None' default value as first option. " +
-                    "Please make sure that the provided enum starts with a 'None' entry at index 0.");
+                    "Please make sure that the provided enum starts with a 'None' entry at index 0.", property.serializedObject.targetObject);
 
                 before = property.objectReferenceValue;
                 var newValue = keyObjectReference.value;
@@ -120,7 +120,7 @@ namespace EinheitsKiste.Internal
                         {
                             if (!keyObjectReference.allowEmpty)
                             {
-                                Debug.LogWarning($"Had to reset {property.name} of {property.serializedObject.targetObject} because of Exception: {e}");
+                                Debug.LogWarning($"Had to reset {property.name} of {property.serializedObject.targetObject} because of Exception: {e}", property.serializedObject.targetObject);
                             }
                             property.objectReferenceValue = null;
                         }
