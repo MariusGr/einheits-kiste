@@ -4,7 +4,6 @@ using System;
 
 namespace EinheitsKiste
 {
-
     public static class EasingFunctions
     {
         public static float Linear(float t) => t;
