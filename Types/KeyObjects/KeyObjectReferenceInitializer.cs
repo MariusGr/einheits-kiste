@@ -57,16 +57,14 @@ namespace EinheitsKiste
                         return;
                     }
 
-                    field.SetValue(target, newValue);
-                    EditorUtility.SetDirty(target);
+                    AssignIfChanged(target, field, newValue);
                 }
                 else if (attr.searchOnlyOnSelf)
                 {
                     var transform = target.transform;
                     var fieldType = field.FieldType;
                     var newValue = KeyObject.GetComponentOnSelf(transform, fieldType);
-                    field.SetValue(target, newValue);
-                    EditorUtility.SetDirty(target);
+                    AssignIfChanged(target, field, newValue);
                 }
             }
             catch (Exception e)
@@ -77,13 +75,23 @@ namespace EinheitsKiste
                     {
                         Debug.LogWarning($"Had to reset {field.Name} of {target.name} because of Exception: {e}");
                     }
-                    field.SetValue(target, null);
+                    AssignIfChanged(target, field, null);
                 }
                 else
                 {
                     Debug.LogError($"Error initializing {field.Name}: {e}");
                 }
             }
+        }
+
+        // Only dirty the target on an actual change, otherwise the periodic re-initialization keeps the scene dirty forever.
+        private static void AssignIfChanged(MonoBehaviour target, System.Reflection.FieldInfo field, UnityEngine.Object newValue)
+        {
+            var oldValue = field.GetValue(target) as UnityEngine.Object;
+            if (oldValue == newValue) return;
+
+            field.SetValue(target, newValue);
+            EditorUtility.SetDirty(target);
         }
     }
 }
